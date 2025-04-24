@@ -1,6 +1,8 @@
 <%@ page import="com.pch.paintfinder.palette.dao.Palette" %>
 <%@ page import="java.util.Map" %>
 <%@ page import="java.util.LinkedHashMap" %>
+<%@ page import="com.pch.paintfinder.member.dao.Member" %>
+<%@ page import="java.util.List" %>
 <%@ include file="include/header.jsp" %>
 <%@ include file="include/navbar.jsp"%>
 <%@ page pageEncoding="UTF-8" %>
@@ -25,6 +27,27 @@
 
     String tab = request.getParameter("tab");
     if (tab == null) tab = "all";
+
+    // 좋아요 누른 팔레트 찾기용
+    Map<String, Member> memberMap = (Map<String, Member>) application.getAttribute("memberMap");
+    Member member = memberMap.get(loginId);
+    Map<Integer, Palette> likePalMap = new LinkedHashMap<>();
+
+    if(member != null && paletteMap != null){
+        List<Integer> likeIds = member.getLikes();
+        if(likeIds != null){
+            for(int id : likeIds){
+                if (paletteMap.containsKey(id)) {
+                    likePalMap.put(id, paletteMap.get(id));
+                }
+            }
+        }
+    }
+%>
+
+<%
+    // 탭 구분용
+    Map<Integer, Palette> mapToRender = "liked".equals(tab) ? likePalMap : paletteMap;
 %>
 
 <div class="row justify-content-center mx-3 mx-md-5">
@@ -42,8 +65,8 @@
     </ul>
 
     <%
-        if ( paletteMap != null && ! paletteMap.isEmpty()) {
-            for (Palette palette :  paletteMap.values()) {
+        if ( mapToRender != null && ! mapToRender.isEmpty()) {
+            for (Palette palette :  mapToRender.values()) {
     %>
     <div class="col-md-3 mb-4">
         <div class="card shadow-sm h-100 bg-light" style="height: 100%;">

@@ -2,6 +2,7 @@
 <%@ page import="java.util.Map" %>
 <%@ page import="com.pch.paintfinder.paint.dao.Paint" %>
 <%@ page import="java.util.List" %>
+<%@ page import="com.pch.paintfinder.member.dao.Member" %>
 <%@ include file="include/header.jsp" %>
 <%@ include file="include/navbar.jsp"%>
 <%@ page pageEncoding="UTF-8" %>
@@ -45,7 +46,20 @@
             </div>
         </div>
     </div>
-    <p class="text-muted mb-5">❤️ 좋아요 <%= palette.getLike() %>개</p>
+
+    <%
+        // 로그인한 사용자 정보 가져와서 좋아요 눌렀는지 여부 확인
+        Map<String, Member> memberMap = (Map<String, Member>) application.getAttribute("memberMap");
+        Member loginMember = (memberMap != null && loginId != null) ? memberMap.get(loginId) : null;
+        boolean liked = loginId != null && loginMember.getLikes().contains(palette.getId());
+    %>
+    <form method="post" action="toggleLike.jsp" style="display: inline;">
+        <input type="hidden" name="paletteId" value="<%= palette.getId() %>">
+        <button type="submit" class="btn btn-link p-0" style="font-size: 1.2rem; text-decoration: none;">
+            <%= liked ? "❤️" : "🤍" %>
+            좋아요 <%= palette.getLike() %>개
+        </button>
+    </form>
 
     <!-- 🎨 3. Paint 카드 리스트 -->
     <div class="row justify-content-center">

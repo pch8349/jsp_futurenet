@@ -1,0 +1,48 @@
+plugins {
+    id 'java'
+    id 'war'
+}
+
+group 'com.pch'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+
+    maven { url 'https://repo.eclipse.org/content/groups/releases/' }  // 혹시 필요한 경우
+}
+
+ext {
+    junitVersion = '5.11.0'
+}
+
+sourceCompatibility = '21'
+targetCompatibility = '21'
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+dependencies {
+    compileOnly('jakarta.servlet:jakarta.servlet-api:6.1.0')
+
+    testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
+
+    // JSP API
+    implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl:2.0.0' // JSTL (JSP용 Jakarta 변환 구현체)
+    implementation 'jakarta.servlet.jsp:jakarta.servlet.jsp-api:3.0.0' // JSP API (Jakarta EE용)
+
+    // Servlet API는 provided로 지정 (Tomcat에서 제공)
+    providedCompile 'jakarta.servlet:jakarta.servlet-api:5.0.0'
+
+    // JSTL 1.2 안정 버전 (권장)
+    implementation 'javax.servlet:jstl:1.2'
+
+    compileOnly 'org.projectlombok:lombok:1.18.30' // 최신 버전 사용
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
+}
+
+test {
+    useJUnitPlatform()
+}

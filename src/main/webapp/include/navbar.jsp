@@ -11,9 +11,9 @@
             <li class="nav-item">
                 <a class="nav-link text-dark fw-semibold" href="paint.jsp">🔍 물감 검색</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link text-dark fw-semibold" href="settings.jsp">⚙️ 설정</a>
-            </li>
+<%--            <li class="nav-item">--%>
+<%--                <a class="nav-link text-dark fw-semibold" href="settings.jsp">⚙️ 설정</a>--%>
+<%--            </li>--%>
         </ul>
     </div>
 </nav>
